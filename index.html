@@ -106,13 +106,63 @@
         .resources-box a:hover {
             text-decoration: underline;
         }
+        
+        /* ---------------- 排行榜表格样式 ---------------- */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        /* 使得模型名称左对齐更符合学术习惯 */
+        td:first-child, th:first-child {
+            text-align: left;
+        }
+        th {
+            background-color: #f4f6f7;
+            color: #333;
+            font-weight: bold;
+            cursor: pointer; /* 鼠标悬浮变小手 */
+            transition: background 0.2s;
+            user-select: none;
+        }
+        th:hover {
+            background-color: #e2e8eb;
+        }
+        /* 添加排序箭头图标占位 */
+        th::after {
+            content: ' \21C5'; /* 上下双向箭头符号 */
+            font-size: 0.8em;
+            color: #999;
+            margin-left: 5px;
+        }
+        th.asc::after {
+            content: ' \2191'; /* 上箭头 */
+            color: #2980b9;
+        }
+        th.desc::after {
+            content: ' \2193'; /* 下箭头 */
+            color: #2980b9;
+        }
+        tr:hover td {
+            background-color: #fbfbfb;
+        }
+        /* ---------------------------------------------- */
+
         .upload-area {
             text-align: center;
             border: 2px dashed #bdc3c7;
             padding: 40px 20px;
             border-radius: 8px;
             background-color: #fafbfc;
-            margin-top: 20px;
+            margin-top: 30px;
         }
         .upload-btn {
             background-color: #27ae60;
@@ -178,7 +228,7 @@
     </section>
 
     <section id="instructions">
-        <h2>Evaluation Instructions</h2>
+        <h2>Evaluation Instructions & Leaderboard</h2>
         
         <div class="resources-box">
             <p><strong>Resources:</strong></p>
@@ -195,6 +245,35 @@
             <li>Upload the <code>.zip</code> file using the interface below. Once evaluated by our multi-task neural assessors, we will update the leaderboard.</li>
         </ol>
 
+        <h3 style="margin-top: 40px; color: #2c3e50;">Leaderboard</h3>
+        <p style="font-size: 0.9em; color: #7f8c8d;">* Click on any column header to sort the table.</p>
+        <div class="table-container">
+            <table id="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Aes. Score</th>
+                        <th>Tag Cla.</th>
+                        <th>Gen. Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>SVD</td><td>0.20</td><td>0.60</td><td>0.69</td></tr>
+                    <tr><td>AnimateDiff</td><td>0.36</td><td>0.57</td><td>0.67</td></tr>
+                    <tr><td>LaVie</td><td>0.34</td><td>0.58</td><td>0.68</td></tr>
+                    <tr><td>Show-1</td><td>0.29</td><td>0.60</td><td>0.04</td></tr>
+                    <tr><td>ModelScope</td><td>0.31</td><td>0.51</td><td>0.64</td></tr>
+                    <tr><td>CogVideoX</td><td>0.41</td><td>0.56</td><td>0.70</td></tr>
+                    <tr><td>Latte-1</td><td>0.35</td><td>0.60</td><td>0.68</td></tr>
+                    <tr><td>Mochi</td><td>0.21</td><td><b>0.68</b></td><td>0.71</td></tr>
+                    <tr><td>LTXVideo</td><td>0.22</td><td>0.61</td><td>0.61</td></tr>
+                    <tr><td>Hunyuan</td><td>0.45</td><td><u>0.66</u></td><td><u>0.73</u></td></tr>
+                    <tr><td>Wan2.2</td><td>0.46</td><td>0.63</td><td>0.71</td></tr>
+                    <tr><td>Sora2</td><td><b>0.50</b></td><td>0.64</td><td><b>0.80</b></td></tr>
+                </tbody>
+            </table>
+        </div>
+
         <div class="upload-area">
             <h3>Submit Your Results</h3>
             <p style="color: #7f8c8d; font-size: 0.9em;">Supported format: .zip</p>
@@ -205,5 +284,58 @@
         </div>
     </section>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const table = document.getElementById('leaderboard-table');
+            const headers = table.querySelectorAll('th');
+            const tbody = table.querySelector('tbody');
+
+            headers.forEach((header, index) => {
+                header.addEventListener('click', () => {
+                    // 确定当前的排序方向（默认初次点击为降序 desc，方便看高分）
+                    const currentIsDesc = header.classList.contains('desc');
+                    const direction = currentIsDesc ? 1 : -1; 
+                    const isAsc = currentIsDesc;
+
+                    // 移除所有表头的排序类
+                    headers.forEach(h => {
+                        h.classList.remove('asc');
+                        h.classList.remove('desc');
+                    });
+
+                    // 给当前点击的表头添加对应排序类
+                    if (isAsc) {
+                        header.classList.add('asc');
+                    } else {
+                        header.classList.add('desc');
+                    }
+
+                    // 获取所有的行并转换成数组
+                    const rowsArray = Array.from(tbody.querySelectorAll('tr'));
+
+                    // 排序核心逻辑
+                    const sortedRows = rowsArray.sort((a, b) => {
+                        // 获取对应列的纯文本内容（忽略 <b> 和 <u> 标签）
+                        const aColText = a.querySelectorAll('td')[index].textContent.trim();
+                        const bColText = b.querySelectorAll('td')[index].textContent.trim();
+
+                        // 尝试转换为数字，如果能转就按数字排，否则按字符串字母表排
+                        const aColNum = parseFloat(aColText);
+                        const bColNum = parseFloat(bColText);
+
+                        if (!isNaN(aColNum) && !isNaN(bColNum)) {
+                            return (aColNum > bColNum ? 1 : -1) * direction;
+                        } else {
+                            return aColText.localeCompare(bColText) * direction;
+                        }
+                    });
+
+                    // 将排序后的行重新插入到 tbody 中
+                    tbody.innerHTML = '';
+                    sortedRows.forEach(row => tbody.appendChild(row));
+                });
+            });
+        });
+    </script>
 </body>
 </html>
