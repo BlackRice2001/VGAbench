@@ -245,6 +245,15 @@
             <li>Upload the <code>.zip</code> file using the interface below. Once evaluated by our multi-task neural assessors, we will update the leaderboard.</li>
         </ol>
 
+        <div class="upload-area">
+            <h3>Submit Your Results</h3>
+            <p style="color: #7f8c8d; font-size: 0.9em;">Supported format: .zip</p>
+            <label for="file-upload" class="upload-btn">
+                Click to Upload ZIP
+            </label>
+            <input id="file-upload" type="file" accept=".zip" onchange="alert('Thank you! Please note: To fully process this upload, a backend server is required.')">
+        </div>
+
         <h3 style="margin-top: 40px; color: #2c3e50;">Leaderboard</h3>
         <p style="font-size: 0.9em; color: #7f8c8d;">* Click on any column header to sort the table.</p>
         <div class="table-container">
@@ -274,14 +283,6 @@
             </table>
         </div>
 
-        <div class="upload-area">
-            <h3>Submit Your Results</h3>
-            <p style="color: #7f8c8d; font-size: 0.9em;">Supported format: .zip</p>
-            <label for="file-upload" class="upload-btn">
-                Click to Upload ZIP
-            </label>
-            <input id="file-upload" type="file" accept=".zip" onchange="alert('Thank you! Please note: To fully process this upload, a backend server is required.')">
-        </div>
     </section>
 
     <script>
