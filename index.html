@@ -31,7 +31,39 @@
             font-size: 1.2em;
             color: #e74c3c;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+        }
+        .paper-link {
+            margin-bottom: 25px;
+        }
+        .paper-link a {
+            display: inline-block;
+            background-color: #ecf0f1;
+            color: #2980b9;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .paper-link a:hover {
+            background-color: #dce4e6;
+        }
+        .authors-section {
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+        .authors-row {
+            margin-bottom: 10px;
+        }
+        .author-name {
+            display: inline-block;
+            margin: 0 8px;
+        }
+        .affiliations {
+            margin-top: 15px;
+            font-size: 0.95em;
+            color: #555;
         }
         .hero-image {
             width: 100%;
@@ -106,7 +138,36 @@
     <header>
         <h1>VGA-Bench: A Unified Benchmark and Multi-Model Framework for Video Aesthetics and Generation Quality Evaluation</h1>
         <div class="conference">(CVPR 2026)</div>
-        <p><strong>Authors:</strong> Longteng Jiang, DanDan Zheng, Huaye Wang, Yihang Bo, Bao Peng, Heng Huang, Jun Zhou, Xin Jin, Qianqian Qiao, Jingdong Chen</p>
+        
+        <div class="paper-link">
+            <a href="https://arxiv.org/abs/2604.10127" target="_blank">📄 arXiv Paper</a>
+        </div>
+
+        <div class="authors-section">
+            <div class="authors-row">
+                <span class="author-name">Longteng Jiang<sup>1</sup></span>
+                <span class="author-name">DanDan Zheng<sup>1</sup></span>
+                <span class="author-name">Qianqian Qiao<sup>1</sup></span>
+                <span class="author-name">Heng Huang<sup>1</sup></span>
+            </div>
+            <div class="authors-row">
+                <span class="author-name">Huaye Wang<sup>1</sup></span>
+                <span class="author-name">Yihang Bo<sup>2</sup></span>
+                <span class="author-name">Bao Peng<sup>2</sup></span>
+                <span class="author-name">Jingdong Chen<sup>1, &dagger;</sup></span>
+                <span class="author-name">JUN ZHOU<sup>1</sup></span>
+                <span class="author-name">Xin Jin<sup>3, &dagger;</sup></span>
+            </div>
+            <div class="affiliations">
+                <div class="authors-row">
+                    <span class="author-name"><sup>1</sup>Ant Group</span>
+                    <span class="author-name"><sup>2</sup>Beijing Film Academy</span>
+                </div>
+                <div class="authors-row">
+                    <span class="author-name"><sup>3</sup>State Key Laboratory of General Artificial Intelligence, BIGAI</span>
+                </div>
+            </div>
+        </div>
     </header>
 
     <img src="head.png" alt="VGA-Bench Overview" class="hero-image">
