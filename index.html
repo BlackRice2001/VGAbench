@@ -232,26 +232,30 @@
         
         <div class="resources-box">
             <p><strong>Resources:</strong></p>
+            <a href="#" target="_blank">🔗 Codes and Scoring Models Download</a>
             <a href="#" target="_blank">🔗 HuggingFace Dataset</a>
             <a href="#" target="_blank">🔗 Prompt Suite Download</a>
         </div>
 
         <p>To participate in the VGA-Bench evaluation and update your model's ranking on our leaderboard, please follow these steps:</p>
         <ol>
-            <li>Download the Prompt Suite from the link above.</li>
-            <li>Generate videos using your model corresponding to the provided prompts.</li>
-            <li>Create a <code>.csv</code> file containing two columns: the exact video file name and its corresponding prompt.</li>
-            <li>Pack all the generated videos and the <code>.csv</code> file into a single <code>.zip</code> folder.</li>
-            <li>Upload the <code>.zip</code> file using the interface below. Once evaluated by our multi-task neural assessors, we will update the leaderboard.</li>
+            <li>Download the Prompt Suite and the official VGA-Bench scoring models from the links above.</li>
+            <li>Generate the complete video set with your own video generation model according to the provided Prompt Suite.</li>
+            <li>Deploy the official VGA-Bench scoring models locally and run them on your generated video set.</li>
+            <li>Export the original evaluation results produced by the scoring models. The submitted results must be the direct output of the scoring models.</li>
+            <li><strong>Do not modify the evaluation results in any way.</strong> Any manual editing, post-processing, filtering, or score adjustment is strictly prohibited. All submissions will be verified.</li>
+            <li>Upload only the unmodified evaluation result file(s) using the interface below. After verification, validated results will be updated on the leaderboard.</li>
         </ol>
 
+        <p style="color: #7f8c8d; font-size: 0.95em;"><strong>Note:</strong> Raw generated videos should not be uploaded through this page. Participants are responsible for running the released scoring models on their generated Prompt Suite videos and submitting the original scoring outputs for verification.</p>
+
         <div class="upload-area">
-            <h3>Submit Your Results</h3>
-            <p style="color: #7f8c8d; font-size: 0.9em;">Supported format: .zip</p>
+            <h3>Submit Your Evaluation Results</h3>
+            <p style="color: #7f8c8d; font-size: 0.9em;">Supported format: original scoring result files, such as .csv, .json, or a .zip package containing unmodified results</p>
             <label for="file-upload" class="upload-btn">
-                Click to Upload ZIP
+                Click to Upload Results
             </label>
-            <input id="file-upload" type="file" accept=".zip" onchange="alert('Thank you! Please note: To fully process this upload, a backend server is required.')">
+            <input id="file-upload" type="file" accept=".csv,.json,.zip" onchange="alert('Thank you! Your submitted evaluation results will be verified before the leaderboard is updated. Please make sure the uploaded files are original, unmodified outputs from the VGA-Bench scoring models.')">
         </div>
 
         <h3 style="margin-top: 40px; color: #2c3e50;">Leaderboard</h3>
@@ -338,5 +342,6 @@
             });
         });
     </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"7939e04a4baf43c8b86a560f74aac60e","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
