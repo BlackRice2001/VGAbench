@@ -4,1198 +4,232 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VGA-Bench | Leaderboard</title>
-
   <style>
     :root {
-      --bg: #ececec;
-      --panel: #f5f5f5;
-      --row: #e9eaeb;
-      --row-alt: #e4e5e7;
-
-      --text: #243242;
-      --muted: #6b7683;
-
-      --teal: #2f9b97;
-      --teal-soft: #cfdee2;
-
-      --blue: #477ac3;
-      --blue-soft: #d2dbe8;
-
-      --orange: #de8541;
-      --orange-soft: #eadcd1;
-
-      --shadow: 0 8px 22px rgba(35, 50, 66, 0.06);
-
-      --radius-xl: 22px;
-      --radius-lg: 16px;
-      --radius-md: 12px;
-      --radius-sm: 8px;
+      --bg:#ececec; --text:#243242; --muted:#6b7683;
+      --teal:#2f9b97; --teal-soft:#cfdee2;
+      --blue:#477ac3; --blue-soft:#d2dbe8;
+      --orange:#de8541; --orange-soft:#eadcd1;
+      --shadow:0 8px 22px rgba(35,50,66,.06);
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family:
-        "Segoe UI",
-        "PingFang SC",
-        "Hiragino Sans GB",
-        "Microsoft YaHei",
-        sans-serif;
-    }
-
-    .page {
-      max-width: 1600px;
-      margin: 0 auto;
-      padding: 34px 34px 42px;
-    }
-
-    /* =========================
-       Header
-       ========================= */
-
-    .header {
-      background: rgba(255, 255, 255, 0.38);
-      border: 1px solid rgba(255, 255, 255, 0.45);
-      border-radius: 26px;
-      padding: 26px 30px;
-      box-shadow: var(--shadow);
-      margin-bottom: 28px;
-      backdrop-filter: blur(4px);
-    }
-
-    .brand {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: 0.02em;
-    }
-
-    .subline {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 0.98rem;
-    }
-
-    .paper-links {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .paper-links a,
-    .resource-card a {
-      text-decoration: none;
-    }
-
-    .pill-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-
-      padding: 11px 16px;
-
-      border-radius: 999px;
-      background: #ffffff;
-      color: var(--text);
-
-      border: 1px solid #e1e5ea;
-
-      font-weight: 700;
-
-      transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.03);
-    }
-
-    .pill-link:hover,
-    .resource-card:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 22px rgba(35, 50, 66, 0.08);
-    }
-
-    /* =========================
-       Main card
-       ========================= */
-
-    .section-card {
-      background: rgba(255, 255, 255, 0.28);
-      border-radius: 28px;
-      padding: 28px;
-      box-shadow: var(--shadow);
-    }
-
-    .section-title {
-      margin: 0 0 20px;
-
-      font-size: 1.35rem;
-      font-weight: 800;
-      letter-spacing: 0.01em;
-    }
-
-    /* =========================
-       Leaderboard
-       ========================= */
-
-    .leaderboard-wrap {
-      overflow-x: auto;
-    }
-
-    .leaderboard {
-      min-width: 1180px;
-    }
-
-    .leaderboard-head,
-    .leaderboard-row {
-      display: grid;
-
-      grid-template-columns:
-        260px
-        repeat(3, minmax(260px, 1fr));
-
-      column-gap: 24px;
-
-      align-items: center;
-    }
-
-    .leaderboard-head {
-      margin-bottom: 18px;
-      padding: 0 18px;
-    }
-
-    .head-model {
-      font-size: 1.08rem;
-      font-weight: 800;
-      color: #2b4060;
-    }
-
-    /* =========================
-       Sortable metric headers
-       ========================= */
-
-    .metric-head {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      color: #ffffff;
-
-      border: none;
-      border-radius: 14px;
-
-      padding: 14px 16px;
-
-      font-size: 0.96rem;
-      font-weight: 800;
-      font-family: inherit;
-
-      text-align: center;
-      letter-spacing: 0.01em;
-
-      cursor: pointer;
-
-      transition:
-        opacity 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-    }
-
-    .metric-head:hover {
-      opacity: 0.94;
-      box-shadow: 0 5px 12px rgba(35, 50, 66, 0.12);
-    }
-
-    .metric-head:active {
-      transform: translateY(1px);
-    }
-
-    .metric-head.teal {
-      background: var(--teal);
-    }
-
-    .metric-head.blue {
-      background: var(--blue);
-    }
-
-    .metric-head.orange {
-      background: var(--orange);
-    }
-
-    /*
-      ↑↓ 排序提示
-    */
-    .sort-icon {
-      display: inline-block;
-
-      margin-left: 8px;
-
-      font-size: 0.9em;
-      font-weight: 800;
-
-      opacity: 0.72;
-
-      min-width: 20px;
-
-      text-align: center;
-      line-height: 1;
-    }
-
-    /*
-      当前正在排序的列，
-      箭头显示更明显。
-    */
-    .metric-head.active .sort-icon {
-      opacity: 1;
-      transform: scale(1.08);
-    }
-
-    /* =========================
-       Leaderboard rows
-       ========================= */
-
-    .leaderboard-body {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .leaderboard-row {
-      background: rgba(255, 255, 255, 0.17);
-
-      border-radius: 16px;
-
-      padding: 13px 18px;
-
-      transition:
-        background 0.18s ease,
-        transform 0.18s ease;
-    }
-
-    .leaderboard-row:nth-child(even) {
-      background: rgba(255, 255, 255, 0.30);
-    }
-
-    .leaderboard-row:hover {
-      background: rgba(255, 255, 255, 0.48);
-    }
-
-    .model-name {
-      font-size: 0.98rem;
-      font-weight: 700;
-      color: #22303d;
-    }
-
-    /* =========================
-       Metric cells
-       ========================= */
-
-    .metric-cell {
-      display: flex;
-      align-items: center;
-
-      gap: 16px;
-
-      min-width: 0;
-    }
-
-    .bar-track {
-      position: relative;
-
-      flex: 1 1 auto;
-
-      height: 18px;
-
-      border-radius: 999px;
-
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      position: absolute;
-
-      left: 0;
-      top: 0;
-      bottom: 0;
-
-      height: 100%;
-
-      border-radius: inherit;
-
-      transition: width 0.35s ease;
-    }
-
-    /* Aesthetic */
-    .metric-cell.teal .bar-track {
-      background: var(--teal-soft);
-    }
-
-    .metric-cell.teal .bar-fill {
-      background: var(--teal);
-    }
-
-    /* Tag */
-    .metric-cell.blue .bar-track {
-      background: var(--blue-soft);
-    }
-
-    .metric-cell.blue .bar-fill {
-      background: var(--blue);
-    }
-
-    /* Generation */
-    .metric-cell.orange .bar-track {
-      background: var(--orange-soft);
-    }
-
-    .metric-cell.orange .bar-fill {
-      background: var(--orange);
-    }
-
-    /* =========================
-       Scores
-       ========================= */
-
-    .score {
-      width: 64px;
-
-      text-align: right;
-
-      font-size: 0.95rem;
-
-      font-variant-numeric: tabular-nums;
-
-      color: #233242;
-    }
-
-    /*
-      每个指标最高分
-    */
-    .score.best {
-      font-weight: 800;
-    }
-
-    /*
-      每个指标第二高分
-    */
-    .score.second {
-      text-decoration: underline;
-      text-underline-offset: 4px;
-      text-decoration-thickness: 2px;
-    }
-
-    .score.teal.best,
-    .score.teal.second {
-      color: var(--teal);
-    }
-
-    .score.blue.best,
-    .score.blue.second {
-      color: var(--blue);
-    }
-
-    .score.orange.best,
-    .score.orange.second {
-      color: var(--orange);
-    }
-
-    /* =========================
-       Resources
-       ========================= */
-
-    .resources-section {
-      margin-top: 26px;
-
-      display: grid;
-
-      grid-template-columns:
-        repeat(2, minmax(260px, 1fr));
-
-      gap: 20px;
-    }
-
-    .resource-card {
-      display: block;
-
-      background: rgba(255, 255, 255, 0.45);
-
-      border: 1px solid rgba(255, 255, 255, 0.50);
-      border-radius: 22px;
-
-      padding: 22px 24px;
-
-      color: inherit;
-      text-decoration: none;
-
-      box-shadow: var(--shadow);
-
-      transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-    }
-
-    .resource-label {
-      display: inline-block;
-
-      margin-bottom: 10px;
-
-      padding: 6px 10px;
-
-      border-radius: 999px;
-
-      font-size: 0.78rem;
-      font-weight: 800;
-
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-    }
-
-    .resource-card.github .resource-label {
-      background: rgba(71, 122, 195, 0.12);
-      color: var(--blue);
-    }
-
-    .resource-card.dataset .resource-label {
-      background: rgba(47, 155, 151, 0.12);
-      color: var(--teal);
-    }
-
-    .resource-title {
-      margin: 0 0 8px;
-
-      font-size: 1.14rem;
-      font-weight: 800;
-
-      color: var(--text);
-    }
-
-    .resource-desc {
-      margin: 0;
-
-      color: var(--muted);
-
-      line-height: 1.55;
-
-      word-break: break-word;
-    }
-
-    /* =========================
-       Responsive
-       ========================= */
-
-    @media (max-width: 1100px) {
-      .page {
-        padding: 20px;
-      }
-
-      .resources-section {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 720px) {
-      .header {
-        padding: 22px 18px;
-      }
-
-      .section-card {
-        padding: 20px 16px;
-      }
-
-      h1 {
-        font-size: 1.6rem;
-      }
-
-      .brand {
-        align-items: flex-start;
-      }
-    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+    .page{max-width:1600px;margin:0 auto;padding:34px 34px 42px}
+    .header{background:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.45);border-radius:26px;padding:26px 30px;box-shadow:var(--shadow);margin-bottom:28px;backdrop-filter:blur(4px)}
+    .brand{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
+    h1{margin:0;font-size:2rem;font-weight:800;letter-spacing:.02em}
+    .subline{margin-top:8px;color:var(--muted);font-size:.98rem}
+    .paper-links{display:flex;gap:12px;flex-wrap:wrap}
+    .pill-link{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border-radius:999px;background:#fff;color:var(--text);border:1px solid #e1e5ea;font-weight:700;text-decoration:none;transition:.2s;box-shadow:0 3px 8px rgba(0,0,0,.03)}
+    .pill-link:hover,.resource-card:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(35,50,66,.08)}
+    .section-card{background:rgba(255,255,255,.28);border-radius:28px;padding:28px;box-shadow:var(--shadow)}
+    .section-title{margin:0 0 14px;font-size:1.35rem;font-weight:800}
+
+    /* View selector */
+    .view-tabs{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 24px}
+    .view-tab{border:1px solid rgba(36,50,66,.09);background:rgba(255,255,255,.48);color:#4c5867;border-radius:999px;padding:9px 14px;font-family:inherit;font-size:.88rem;font-weight:750;cursor:pointer;transition:.18s}
+    .view-tab:hover{background:rgba(255,255,255,.75)}
+    .view-tab.active{color:#fff;border-color:transparent;box-shadow:0 5px 12px rgba(35,50,66,.12)}
+    .view-tab[data-theme="neutral"].active{background:#37485d}
+    .view-tab[data-theme="teal"].active{background:var(--teal)}
+    .view-tab[data-theme="blue"].active{background:var(--blue)}
+    .view-tab[data-theme="orange"].active{background:var(--orange)}
+    .view-note{color:var(--muted);font-size:.87rem;margin:-12px 0 18px}
+
+    /* Overall leaderboard */
+    .leaderboard-wrap,.subtable-wrap{overflow-x:auto}
+    .leaderboard{min-width:1180px}
+    .leaderboard-head,.leaderboard-row{display:grid;grid-template-columns:260px repeat(3,minmax(260px,1fr));column-gap:24px;align-items:center}
+    .leaderboard-head{margin-bottom:18px;padding:0 18px}
+    .head-model{font-size:1.08rem;font-weight:800;color:#2b4060}
+    .metric-head{display:flex;align-items:center;justify-content:center;color:#fff;border:none;border-radius:14px;padding:14px 16px;font-family:inherit;font-size:.96rem;font-weight:800;cursor:pointer;transition:.2s}
+    .metric-head:hover{opacity:.94;box-shadow:0 5px 12px rgba(35,50,66,.12)}
+    .metric-head.teal{background:var(--teal)} .metric-head.blue{background:var(--blue)} .metric-head.orange{background:var(--orange)}
+    .sort-icon{display:inline-block;margin-left:8px;font-size:.9em;font-weight:800;opacity:.72;min-width:20px;text-align:center;line-height:1}
+    .metric-head.active .sort-icon{opacity:1;transform:scale(1.08)}
+    .leaderboard-body{display:flex;flex-direction:column;gap:8px}
+    .leaderboard-row{background:rgba(255,255,255,.17);border-radius:16px;padding:13px 18px;transition:.18s}
+    .leaderboard-row:nth-child(even){background:rgba(255,255,255,.30)}
+    .leaderboard-row:hover{background:rgba(255,255,255,.48)}
+    .model-name{font-size:.98rem;font-weight:700;color:#22303d}
+    .metric-cell{display:flex;align-items:center;gap:16px;min-width:0}
+    .bar-track{position:relative;flex:1 1 auto;height:18px;border-radius:999px;overflow:hidden}
+    .bar-fill{position:absolute;left:0;top:0;bottom:0;height:100%;border-radius:inherit;transition:width .35s ease}
+    .metric-cell.teal .bar-track{background:var(--teal-soft)} .metric-cell.teal .bar-fill{background:var(--teal)}
+    .metric-cell.blue .bar-track{background:var(--blue-soft)} .metric-cell.blue .bar-fill{background:var(--blue)}
+    .metric-cell.orange .bar-track{background:var(--orange-soft)} .metric-cell.orange .bar-fill{background:var(--orange)}
+    .score{width:64px;text-align:right;font-size:.95rem;font-variant-numeric:tabular-nums;color:#233242}
+    .score.best{font-weight:800} .score.second{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:2px}
+    .score.teal.best,.score.teal.second{color:var(--teal)} .score.blue.best,.score.blue.second{color:var(--blue)} .score.orange.best,.score.orange.second{color:var(--orange)}
+
+    /* Numeric subtables */
+    .subtable-wrap{border-radius:18px;background:rgba(255,255,255,.18)}
+    .subtable{width:100%;min-width:max-content;border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums}
+    .subtable th,.subtable td{padding:12px 16px;text-align:center;white-space:nowrap;border-bottom:1px solid rgba(36,50,66,.075)}
+    .subtable th{font-size:.9rem;font-weight:800;color:#fff;position:sticky;top:0;z-index:2}
+    .subtable.theme-teal th{background:var(--teal)}
+    .subtable.theme-blue th{background:var(--blue)}
+    .subtable.theme-orange th{background:var(--orange)}
+    .subtable th:first-child{left:0;z-index:3;text-align:left;min-width:185px;border-radius:14px 0 0 0}
+    .subtable th:last-child{border-radius:0 14px 0 0}
+    .subtable td{font-size:.92rem;color:#283543;background:rgba(255,255,255,.16)}
+    .subtable tbody tr:nth-child(even) td{background:rgba(255,255,255,.32)}
+    .subtable tbody tr:hover td{background:rgba(255,255,255,.53)}
+    .subtable td:first-child{position:sticky;left:0;z-index:1;text-align:left;font-weight:700;min-width:185px;box-shadow:8px 0 12px -12px rgba(36,50,66,.35)}
+    .subtable tbody tr:nth-child(odd) td:first-child{background:#ededed}
+    .subtable tbody tr:nth-child(even) td:first-child{background:#f2f2f2}
+    .subtable tbody tr:hover td:first-child{background:#f6f6f6}
+    .sub-best{font-weight:850}
+    .sub-second{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:2px}
+    .theme-teal .sub-best,.theme-teal .sub-second{color:var(--teal)}
+    .theme-blue .sub-best,.theme-blue .sub-second{color:var(--blue)}
+    .theme-orange .sub-best,.theme-orange .sub-second{color:var(--orange)}
+
+    /* Resources */
+    .resources-section{margin-top:26px;display:grid;grid-template-columns:repeat(2,minmax(260px,1fr));gap:20px}
+    .resource-card{display:block;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.5);border-radius:22px;padding:22px 24px;color:inherit;text-decoration:none;box-shadow:var(--shadow);transition:.2s}
+    .resource-label{display:inline-block;margin-bottom:10px;padding:6px 10px;border-radius:999px;font-size:.78rem;font-weight:800;letter-spacing:.02em;text-transform:uppercase}
+    .resource-card.github .resource-label{background:rgba(71,122,195,.12);color:var(--blue)} .resource-card.dataset .resource-label{background:rgba(47,155,151,.12);color:var(--teal)}
+    .resource-title{margin:0 0 8px;font-size:1.14rem;font-weight:800} .resource-desc{margin:0;color:var(--muted);line-height:1.55;word-break:break-word}
+    .hidden{display:none!important}
+    @media(max-width:1100px){.page{padding:20px}.resources-section{grid-template-columns:1fr}}
+    @media(max-width:720px){.header{padding:22px 18px}.section-card{padding:20px 16px}h1{font-size:1.6rem}.brand{align-items:flex-start}}
   </style>
 </head>
-
 <body>
-
   <div class="page">
-
-    <!-- =========================
-         Header
-         ========================= -->
-
     <header class="header">
-
       <div class="brand">
-
-        <div>
-          <h1>VGA-Bench</h1>
-
-          <div class="subline">
-            Leaderboard · Papers · Toolkit · Dataset
-          </div>
-        </div>
-
+        <div><h1>VGA-Bench</h1><div class="subline">Leaderboard · Papers · Toolkit · Dataset</div></div>
         <div class="paper-links">
-
-          <a
-            class="pill-link"
-            href="https://arxiv.org/abs/2604.10127"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            📄 arXiv 2604.10127
-          </a>
-
-          <a
-            class="pill-link"
-            href="https://arxiv.org/abs/2608.25452"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            📄 arXiv 2608.25452
-          </a>
-
+          <a class="pill-link" href="https://arxiv.org/abs/2604.10127" target="_blank" rel="noopener noreferrer">📄 arXiv 2604.10127</a>
+          <a class="pill-link" href="https://arxiv.org/abs/2608.25452" target="_blank" rel="noopener noreferrer">📄 arXiv 2608.25452</a>
         </div>
-
       </div>
-
     </header>
 
-
-    <!-- =========================
-         Main
-         ========================= -->
-
     <main class="section-card">
+      <h2 class="section-title">Leaderboard</h2>
+      <div class="view-tabs" id="view-tabs">
+        <button class="view-tab active" data-view="overall" data-theme="neutral">Overall</button>
+        <button class="view-tab" data-view="aesthetic" data-theme="teal">Aesthetic Quality</button>
+        <button class="view-tab" data-view="tag" data-theme="blue">Aesthetic Tag</button>
+        <button class="view-tab" data-view="videoText" data-theme="orange">Video-Text Consistency</button>
+        <button class="view-tab" data-view="realism" data-theme="orange">Realism &amp; Plausibility</button>
+        <button class="view-tab" data-view="basic" data-theme="orange">Basic Visual Quality</button>
+      </div>
+      <div class="view-note" id="view-note">Overall scores. Click the colored metric headers to switch between descending and ascending order.</div>
 
-      <h2 class="section-title">
-        Leaderboard
-      </h2>
-
-
-      <!-- =========================
-           Leaderboard
-           ========================= -->
-
-      <div class="leaderboard-wrap">
-
-        <div
-          class="leaderboard"
-          id="leaderboard"
-        >
-
-          <!-- Header -->
-
-          <div class="leaderboard-head">
-
-            <div class="head-model">
-              模型
+      <div id="overall-view">
+        <div class="leaderboard-wrap">
+          <div class="leaderboard">
+            <div class="leaderboard-head">
+              <div class="head-model">模型</div>
+              <button class="metric-head teal" data-sort="aes" type="button"><span>Aes. Score</span><span class="sort-icon">↑↓</span></button>
+              <button class="metric-head blue" data-sort="tag" type="button"><span>Tag Cla.</span><span class="sort-icon">↑↓</span></button>
+              <button class="metric-head orange" data-sort="gen" type="button"><span>Gen. Level</span><span class="sort-icon">↑↓</span></button>
             </div>
-
-            <button
-              class="metric-head teal"
-              data-sort="aes"
-              type="button"
-              title="点击切换升序 / 降序"
-              aria-label="按照 Aes. Score 排序"
-            >
-              <span>Aes. Score</span>
-              <span class="sort-icon">↑↓</span>
-            </button>
-
-            <button
-              class="metric-head blue"
-              data-sort="tag"
-              type="button"
-              title="点击切换升序 / 降序"
-              aria-label="按照 Tag Cla. 排序"
-            >
-              <span>Tag Cla.</span>
-              <span class="sort-icon">↑↓</span>
-            </button>
-
-            <button
-              class="metric-head orange"
-              data-sort="gen"
-              type="button"
-              title="点击切换升序 / 降序"
-              aria-label="按照 Gen. Level 排序"
-            >
-              <span>Gen. Level</span>
-              <span class="sort-icon">↑↓</span>
-            </button>
-
+            <div class="leaderboard-body" id="leaderboard-body"></div>
           </div>
-
-
-          <!-- Rows -->
-
-          <div
-            class="leaderboard-body"
-            id="leaderboard-body"
-          ></div>
-
         </div>
-
       </div>
 
-
-      <!-- =========================
-           Resources
-           ========================= -->
+      <div id="subtable-view" class="hidden"></div>
 
       <div class="resources-section">
-
-        <a
-          class="resource-card github"
-          href="https://github.com/BestiVictory/VGA-Bench"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-
-          <div class="resource-label">
-            Toolkit
-          </div>
-
-          <h3 class="resource-title">
-            Code &amp; Evaluation Toolkit
-          </h3>
-
-          <p class="resource-desc">
-            https://github.com/BestiVictory/VGA-Bench
-          </p>
-
-        </a>
-
-
-        <a
-          class="resource-card dataset"
-          href="https://huggingface.co/datasets/BestiVictoryLab/VGA-Bench"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-
-          <div class="resource-label">
-            Dataset
-          </div>
-
-          <h3 class="resource-title">
-            Hugging Face Dataset
-          </h3>
-
-          <p class="resource-desc">
-            https://huggingface.co/datasets/BestiVictoryLab/VGA-Bench
-          </p>
-
-        </a>
-
+        <a class="resource-card github" href="https://github.com/BestiVictory/VGA-Bench" target="_blank" rel="noopener noreferrer"><div class="resource-label">Toolkit</div><h3 class="resource-title">Code &amp; Evaluation Toolkit</h3><p class="resource-desc">https://github.com/BestiVictory/VGA-Bench</p></a>
+        <a class="resource-card dataset" href="https://huggingface.co/datasets/BestiVictoryLab/VGA-Bench" target="_blank" rel="noopener noreferrer"><div class="resource-label">Dataset</div><h3 class="resource-title">Hugging Face Dataset</h3><p class="resource-desc">https://huggingface.co/datasets/BestiVictoryLab/VGA-Bench</p></a>
       </div>
-
     </main>
-
   </div>
 
-
   <script>
-
-    /* =========================================
-       Leaderboard Data
-       ========================================= */
-
-    const rows = [
-
-      {
-        model: 'SVD',
-        aes: 0.20,
-        tag: 0.60,
-        gen: 0.69
-      },
-
-      {
-        model: 'AnimateDiff',
-        aes: 0.36,
-        tag: 0.57,
-        gen: 0.67
-      },
-
-      {
-        model: 'LaVie',
-        aes: 0.34,
-        tag: 0.58,
-        gen: 0.68
-      },
-
-      {
-        model: 'Show-1',
-        aes: 0.29,
-        tag: 0.60,
-        gen: 0.04
-      },
-
-      {
-        model: 'ModelScope',
-        aes: 0.31,
-        tag: 0.51,
-        gen: 0.64
-      },
-
-      {
-        model: 'CogVideoX',
-        aes: 0.41,
-        tag: 0.56,
-        gen: 0.70
-      },
-
-      {
-        model: 'Latte-1',
-        aes: 0.35,
-        tag: 0.60,
-        gen: 0.68
-      },
-
-      {
-        model: 'Mochi',
-        aes: 0.21,
-        tag: 0.68,
-        gen: 0.71
-      },
-
-      {
-        model: 'LTXVideo',
-        aes: 0.22,
-        tag: 0.61,
-        gen: 0.61
-      },
-
-      {
-        model: 'HunyuanVideo',
-        aes: 0.45,
-        tag: 0.66,
-        gen: 0.73
-      },
-
-      {
-        model: 'Wan2.2',
-        aes: 0.46,
-        tag: 0.63,
-        gen: 0.71
-      },
-
-      {
-        model: 'Sora2',
-        aes: 0.50,
-        tag: 0.64,
-        gen: 0.80
-      }
-
-    ];
-
-
-    /* =========================================
-       Sorting State
-       ========================================= */
-
-    const state = {
-
-      /*
-        null:
-        页面首次打开时保持原始模型顺序
-      */
-      sortKey: null,
-
-      /*
-        第一次点击某个指标后，
-        默认高分 -> 低分
-      */
-      descending: true
-
+    const DATA={"models":["SVD","AnimateDiff","LaVie","Show-1","ModelScope","CogVideoX","Latte-1","Mochi","LTXVideo","HunyuanVideo","Wan2.2","Sora2"],"overall":{"SVD":{"aes":0.2,"tag":0.6,"gen":0.69},"AnimateDiff":{"aes":0.36,"tag":0.57,"gen":0.67},"LaVie":{"aes":0.34,"tag":0.58,"gen":0.68},"Show-1":{"aes":0.29,"tag":0.6,"gen":0.04},"ModelScope":{"aes":0.31,"tag":0.51,"gen":0.64},"CogVideoX":{"aes":0.41,"tag":0.56,"gen":0.7},"Latte-1":{"aes":0.35,"tag":0.6,"gen":0.68},"Mochi":{"aes":0.21,"tag":0.68,"gen":0.71},"LTXVideo":{"aes":0.22,"tag":0.61,"gen":0.61},"HunyuanVideo":{"aes":0.45,"tag":0.66,"gen":0.73},"Wan2.2":{"aes":0.46,"tag":0.63,"gen":0.71},"Sora2":{"aes":0.5,"tag":0.64,"gen":0.8}},"aesthetic":{"SVD":{"Overall":0.204,"Com":0.305,"SS":0.26,"Lig":0.229,"VT":0.233,"Col":0.277,"DoF":0.191,"Exp":0.207,"Cos":0.151,"Mak":0.164},"AnimateDiff":{"Overall":0.356,"Com":0.475,"SS":0.446,"Lig":0.427,"VT":0.415,"Col":0.46,"DoF":0.4,"Exp":0.317,"Cos":0.364,"Mak":0.31},"LaVie":{"Overall":0.341,"Com":0.468,"SS":0.435,"Lig":0.421,"VT":0.407,"Col":0.442,"DoF":0.396,"Exp":0.309,"Cos":0.34,"Mak":0.293},"Show-1":{"Overall":0.29,"Com":0.415,"SS":0.383,"Lig":0.367,"VT":0.357,"Col":0.397,"DoF":0.33,"Exp":0.294,"Cos":0.317,"Mak":0.294},"ModelScope":{"Overall":0.312,"Com":0.445,"SS":0.413,"Lig":0.397,"VT":0.381,"Col":0.43,"DoF":0.377,"Exp":0.287,"Cos":0.334,"Mak":0.266},"CogVideoX":{"Overall":0.405,"Com":0.48,"SS":0.454,"Lig":0.437,"VT":0.431,"Col":0.453,"DoF":0.399,"Exp":0.389,"Cos":0.42,"Mak":0.354},"Latte-1":{"Overall":0.345,"Com":0.472,"SS":0.435,"Lig":0.42,"VT":0.41,"Col":0.445,"DoF":0.393,"Exp":0.313,"Cos":0.34,"Mak":0.296},"Mochi":{"Overall":0.211,"Com":0.306,"SS":0.269,"Lig":0.24,"VT":0.234,"Col":0.283,"DoF":0.203,"Exp":0.198,"Cos":0.147,"Mak":0.147},"LTXVideo":{"Overall":0.214,"Com":0.313,"SS":0.275,"Lig":0.238,"VT":0.241,"Col":0.285,"DoF":0.208,"Exp":0.189,"Cos":0.142,"Mak":0.125},"HunyuanVideo":{"Overall":0.452,"Com":0.531,"SS":0.505,"Lig":0.507,"VT":0.504,"Col":0.512,"DoF":0.485,"Exp":0.455,"Cos":0.465,"Mak":0.43},"Wan2.2":{"Overall":0.459,"Com":0.552,"SS":0.523,"Lig":0.523,"VT":0.521,"Col":0.521,"DoF":0.503,"Exp":0.436,"Cos":0.459,"Mak":0.412},"Sora2":{"Overall":0.504,"Com":0.559,"SS":0.532,"Lig":0.543,"VT":0.564,"Col":0.56,"DoF":0.54,"Exp":0.52,"Cos":0.532,"Mak":0.452}},"tag":{"SVD":{"CT":0.582,"NoLS":0.778,"LSP":0.314,"LQ":0.505,"LC":0.636,"ST":0.426,"DoF":0.617,"Sat":0.779,"Bri":0.722,"ColT":0.667,"Con":0.667},"AnimateDiff":{"CT":0.509,"NoLS":0.787,"LSP":0.236,"LQ":0.562,"LC":0.602,"ST":0.381,"DoF":0.531,"Sat":0.818,"Bri":0.722,"ColT":0.611,"Con":0.579},"LaVie":{"CT":0.552,"NoLS":0.815,"LSP":0.336,"LQ":0.552,"LC":0.568,"ST":0.374,"DoF":0.58,"Sat":0.675,"Bri":0.667,"ColT":0.63,"Con":0.649},"Show-1":{"CT":0.582,"NoLS":0.778,"LSP":0.314,"LQ":0.505,"LC":0.636,"ST":0.426,"DoF":0.617,"Sat":0.779,"Bri":0.722,"ColT":0.815,"Con":0.667},"ModelScope":{"CT":0.503,"NoLS":0.62,"LSP":0.3,"LQ":0.467,"LC":0.568,"ST":0.258,"DoF":0.503,"Sat":0.714,"Bri":0.625,"ColT":0.574,"Con":0.526},"CogVideoX":{"CT":0.497,"NoLS":0.815,"LSP":0.3,"LQ":0.495,"LC":0.72,"ST":0.271,"DoF":0.519,"Sat":0.753,"Bri":0.681,"ColT":0.815,"Con":0.597},"Latte-1":{"CT":0.564,"NoLS":0.732,"LSP":0.3,"LQ":0.6,"LC":0.661,"ST":0.348,"DoF":0.605,"Sat":0.714,"Bri":0.75,"ColT":0.796,"Con":0.684},"Mochi":{"CT":0.697,"NoLS":0.87,"LSP":0.386,"LQ":0.619,"LC":0.788,"ST":0.426,"DoF":0.716,"Sat":0.766,"Bri":0.819,"ColT":0.796,"Con":0.719},"LTXVideo":{"CT":0.533,"NoLS":0.87,"LSP":0.286,"LQ":0.543,"LC":0.831,"ST":0.387,"DoF":0.617,"Sat":0.636,"Bri":0.736,"ColT":0.778,"Con":0.649},"HunyuanVideo":{"CT":0.603,"NoLS":0.892,"LSP":0.344,"LQ":0.694,"LC":0.704,"ST":0.463,"DoF":0.607,"Sat":0.864,"Bri":0.736,"ColT":0.642,"Con":0.732},"Wan2.2":{"CT":0.62,"NoLS":0.817,"LSP":0.344,"LQ":0.647,"LC":0.74,"ST":0.388,"DoF":0.571,"Sat":0.711,"Bri":0.775,"ColT":0.72,"Con":0.712},"Sora2":{"CT":0.618,"NoLS":0.824,"LSP":0.321,"LQ":0.524,"LC":0.686,"ST":0.51,"DoF":0.605,"Sat":0.805,"Bri":0.847,"ColT":0.833,"Con":0.702}},"videoText":{"SVD":{"Cha-T":0.617,"Act-T":0.95,"Obj-T":0.958,"Sce-T":0.989,"Pos-T":0.675,"Cam-T":0.697,"Att-T":0.95,"Cnt-T":0.58,"Sty-T":0.583,"Spd-T":0.345},"AnimateDiff":{"Cha-T":0.598,"Act-T":0.945,"Obj-T":0.958,"Sce-T":0.957,"Pos-T":0.72,"Cam-T":0.727,"Att-T":0.958,"Cnt-T":0.51,"Sty-T":0.633,"Spd-T":0.321},"LaVie":{"Cha-T":0.688,"Act-T":0.895,"Obj-T":0.883,"Sce-T":0.982,"Pos-T":0.56,"Cam-T":0.727,"Att-T":0.933,"Cnt-T":0.59,"Sty-T":0.692,"Spd-T":0.321},"Show-1":{"Cha-T":0.042,"Act-T":0.0,"Obj-T":0.013,"Sce-T":0.0,"Pos-T":0.01,"Cam-T":0.263,"Att-T":0.0,"Cnt-T":0.0,"Sty-T":0.017,"Spd-T":0.024},"ModelScope":{"Cha-T":0.643,"Act-T":0.855,"Obj-T":0.858,"Sce-T":0.914,"Pos-T":0.535,"Cam-T":0.758,"Att-T":0.908,"Cnt-T":0.525,"Sty-T":0.667,"Spd-T":0.298},"CogVideoX":{"Cha-T":0.595,"Act-T":0.915,"Obj-T":0.933,"Sce-T":0.975,"Pos-T":0.66,"Cam-T":0.798,"Att-T":0.958,"Cnt-T":0.645,"Sty-T":0.683,"Spd-T":0.321},"Latte-1":{"Cha-T":0.63,"Act-T":0.865,"Obj-T":0.892,"Sce-T":0.964,"Pos-T":0.59,"Cam-T":0.778,"Att-T":0.933,"Cnt-T":0.585,"Sty-T":0.708,"Spd-T":0.345},"Mochi":{"Cha-T":0.543,"Act-T":0.94,"Obj-T":0.938,"Sce-T":0.939,"Pos-T":0.84,"Cam-T":0.758,"Att-T":0.942,"Cnt-T":0.655,"Sty-T":0.625,"Spd-T":0.333},"LTXVideo":{"Cha-T":0.5,"Act-T":0.64,"Obj-T":0.797,"Sce-T":0.754,"Pos-T":0.585,"Cam-T":0.737,"Att-T":0.817,"Cnt-T":0.5,"Sty-T":0.592,"Spd-T":0.321},"HunyuanVideo":{"Cha-T":0.569,"Act-T":0.955,"Obj-T":0.946,"Sce-T":0.943,"Pos-T":0.775,"Cam-T":0.747,"Att-T":0.967,"Cnt-T":0.63,"Sty-T":0.575,"Spd-T":0.333},"Wan2.2":{"Cha-T":0.518,"Act-T":0.883,"Obj-T":0.912,"Sce-T":0.914,"Pos-T":0.739,"Cam-T":0.778,"Att-T":0.917,"Cnt-T":0.625,"Sty-T":0.642,"Spd-T":0.347},"Sora2":{"Cha-T":0.9,"Act-T":1.0,"Obj-T":0.996,"Sce-T":1.0,"Pos-T":0.86,"Cam-T":0.828,"Att-T":0.992,"Cnt-T":0.73,"Sty-T":0.817,"Spd-T":0.357}},"realism":{"SVD":{"Rig-R":0.2,"Flu-R":0.663,"Gas-R":0.675,"Gra-R":0.113,"Tra-R":0.563,"Act-R":0.745,"Sce-R":0.746,"Obj-R":0.708,"Cha-R":0.64,"Wea-R":0.69,"Tim-R":0.75,"Lig-R":0.75,"Dyn-R":0.818,"Att-R":0.75,"Glo-R":0.655,"Ima-R":0.838},"AnimateDiff":{"Rig-R":0.288,"Flu-R":0.738,"Gas-R":0.663,"Gra-R":0.113,"Tra-R":0.6,"Act-R":0.75,"Sce-R":0.554,"Obj-R":0.513,"Cha-R":0.687,"Wea-R":0.69,"Tim-R":0.688,"Lig-R":0.75,"Dyn-R":0.83,"Att-R":0.75,"Glo-R":0.03,"Ima-R":0.838},"LaVie":{"Rig-R":0.188,"Flu-R":0.675,"Gas-R":0.7,"Gra-R":0.038,"Tra-R":0.4,"Act-R":0.75,"Sce-R":0.75,"Obj-R":0.658,"Cha-R":0.673,"Wea-R":0.7,"Tim-R":0.713,"Lig-R":0.713,"Dyn-R":0.835,"Att-R":0.742,"Glo-R":0.74,"Ima-R":0.8},"Show-1":{"Rig-R":0.0,"Flu-R":0.188,"Gas-R":0.3,"Gra-R":0.0,"Tra-R":0.0,"Act-R":0.0,"Sce-R":0.0,"Obj-R":0.013,"Cha-R":0.013,"Wea-R":0.03,"Tim-R":0.0,"Lig-R":0.225,"Dyn-R":0.0,"Att-R":0.0,"Glo-R":0.0,"Ima-R":0.075},"ModelScope":{"Rig-R":0.15,"Flu-R":0.663,"Gas-R":0.713,"Gra-R":0.038,"Tra-R":0.488,"Act-R":0.7,"Sce-R":0.75,"Obj-R":0.692,"Cha-R":0.603,"Wea-R":0.54,"Tim-R":0.675,"Lig-R":0.675,"Dyn-R":0.773,"Att-R":0.733,"Glo-R":0.605,"Ima-R":0.7},"CogVideoX":{"Rig-R":0.213,"Flu-R":0.675,"Gas-R":0.738,"Gra-R":0.075,"Tra-R":0.5,"Act-R":0.75,"Sce-R":0.736,"Obj-R":0.738,"Cha-R":0.701,"Wea-R":0.7,"Tim-R":0.75,"Lig-R":0.75,"Dyn-R":0.886,"Att-R":0.758,"Glo-R":0.745,"Ima-R":0.775},"Latte-1":{"Rig-R":0.163,"Flu-R":0.638,"Gas-R":0.738,"Gra-R":0.113,"Tra-R":0.438,"Act-R":0.735,"Sce-R":0.75,"Obj-R":0.7,"Cha-R":0.617,"Wea-R":0.71,"Tim-R":0.75,"Lig-R":0.75,"Dyn-R":0.784,"Att-R":0.75,"Glo-R":0.715,"Ima-R":0.8},"Mochi":{"Rig-R":0.425,"Flu-R":0.713,"Gas-R":0.75,"Gra-R":0.113,"Tra-R":0.725,"Act-R":0.75,"Sce-R":0.75,"Obj-R":0.725,"Cha-R":0.663,"Wea-R":0.71,"Tim-R":0.75,"Lig-R":0.75,"Dyn-R":0.824,"Att-R":0.75,"Glo-R":0.72,"Ima-R":0.788},"LTXVideo":{"Rig-R":0.075,"Flu-R":0.713,"Gas-R":0.713,"Gra-R":0.063,"Tra-R":0.475,"Act-R":0.46,"Sce-R":0.568,"Obj-R":0.694,"Cha-R":0.437,"Wea-R":0.58,"Tim-R":0.75,"Lig-R":0.75,"Dyn-R":0.665,"Att-R":0.733,"Glo-R":0.625,"Ima-R":0.613},"HunyuanVideo":{"Rig-R":0.363,"Flu-R":0.75,"Gas-R":0.713,"Gra-R":0.113,"Tra-R":0.65,"Act-R":0.77,"Sce-R":0.746,"Obj-R":0.742,"Cha-R":0.767,"Wea-R":0.7,"Tim-R":0.738,"Lig-R":0.75,"Dyn-R":0.875,"Att-R":0.783,"Glo-R":0.75,"Ima-R":0.75},"Wan2.2":{"Rig-R":0.375,"Flu-R":0.75,"Gas-R":0.713,"Gra-R":0.113,"Tra-R":0.65,"Act-R":0.77,"Sce-R":0.746,"Obj-R":0.742,"Cha-R":0.741,"Wea-R":0.618,"Tim-R":0.75,"Lig-R":0.75,"Dyn-R":0.875,"Att-R":0.783,"Glo-R":0.69,"Ima-R":0.736},"Sora2":{"Rig-R":0.638,"Flu-R":0.75,"Gas-R":0.75,"Gra-R":0.488,"Tra-R":0.738,"Act-R":0.833,"Sce-R":0.75,"Obj-R":0.8,"Cha-R":0.813,"Wea-R":0.78,"Tim-R":0.75,"Lig-R":0.75,"Dyn-R":0.903,"Att-R":0.833,"Glo-R":0.75,"Ima-R":0.75}},"basic":{"SVD":{"Noi":0.496,"AbL":0.98,"Cla":0.84,"Sta":0.778,"Dis":0.723},"AnimateDiff":{"Noi":0.624,"AbL":0.969,"Cla":0.925,"Sta":0.748,"Dis":0.768},"LaVie":{"Noi":0.521,"AbL":0.929,"Cla":0.86,"Sta":0.63,"Dis":0.75},"Show-1":{"Noi":0.009,"AbL":0.041,"Cla":0.0,"Sta":0.03,"Dis":0.0},"ModelScope":{"Noi":0.333,"AbL":0.99,"Cla":0.78,"Sta":0.674,"Dis":0.75},"CogVideoX":{"Noi":0.427,"AbL":0.949,"Cla":0.79,"Sta":0.726,"Dis":0.75},"Latte-1":{"Noi":0.496,"AbL":0.929,"Cla":0.84,"Sta":0.663,"Dis":0.768},"Mochi":{"Noi":0.453,"AbL":0.906,"Cla":0.815,"Sta":0.741,"Dis":0.75},"LTXVideo":{"Noi":0.377,"AbL":0.927,"Cla":0.77,"Sta":0.774,"Dis":0.759},"HunyuanVideo":{"Noi":0.636,"AbL":1.0,"Cla":0.95,"Sta":0.767,"Dis":0.75},"Wan2.2":{"Noi":0.632,"AbL":0.939,"Cla":0.935,"Sta":0.722,"Dis":0.714},"Sora2":{"Noi":0.53,"AbL":0.959,"Cla":0.87,"Sta":0.811,"Dis":0.759}}};
+    const tableConfig={
+      aesthetic:{title:'Aesthetic Quality Dimensions',theme:'teal',columns:["Overall", "Com", "SS", "Lig", "VT", "Col", "DoF", "Exp", "Cos", "Mak"]},
+      tag:{title:'Aesthetic Tag Prediction Capabilities',theme:'blue',columns:["CT", "NoLS", "LSP", "LQ", "LC", "ST", "DoF", "Sat", "Bri", "ColT", "Con"]},
+      videoText:{title:'Video-Text Consistency',theme:'orange',columns:["Cha-T", "Act-T", "Obj-T", "Sce-T", "Pos-T", "Cam-T", "Att-T", "Cnt-T", "Sty-T", "Spd-T"]},
+      realism:{title:'Realism & Plausibility',theme:'orange',columns:["Rig-R", "Flu-R", "Gas-R", "Gra-R", "Tra-R", "Act-R", "Sce-R", "Obj-R", "Cha-R", "Wea-R", "Tim-R", "Lig-R", "Dyn-R", "Att-R", "Glo-R", "Ima-R"]},
+      basic:{title:'Basic Visual Quality',theme:'orange',columns:["Noi", "AbL", "Cla", "Sta", "Dis"]}
     };
+    const overallState={sortKey:null,descending:true};
 
-
-    /* =========================================
-       Get Best / Second Best
-       ========================================= */
-
-    function getRanks(key) {
-
-      /*
-        去重后按照从大到小排列。
-
-        例如：
-        [0.80, 0.73, 0.71, 0.71 ...]
-
-        best   = 0.80
-        second = 0.73
-
-        如果两个模型并列 0.71，
-        不会错误地把 0.71 同时认为第一和第二。
-      */
-
-      const values = [
-        ...new Set(
-          rows.map(item => item[key])
-        )
-      ].sort((a, b) => b - a);
-
-      return {
-        best: values[0],
-        second: values[1]
-      };
-
+    function overallRanks(key){
+      const values=[...new Set(DATA.models.map(m=>DATA.overall[m][key]))].sort((a,b)=>b-a);
+      return {best:values[0],second:values[1]};
     }
-
-
-    /* =========================================
-       Create Metric Cell
-       ========================================= */
-
-    function createMetricCell(
-      value,
-      key,
-      className
-    ) {
-
-      /*
-        =========================================
-        IMPORTANT
-        =========================================
-
-        这里不再按照当前所有模型的最大值 / 最小值归一化。
-
-        统一使用固定的 0 ~ 1 比例：
-
-        0.00 =   0%
-        0.20 =  20%
-        0.50 =  50%
-        0.80 =  80%
-        1.00 = 100%
-
-        Math.max / Math.min 用于避免未来数据
-        意外超过 0~1 时破坏进度条。
-      */
-
-      const safeValue = Math.max(
-        0,
-        Math.min(1, value)
-      );
-
-      const percentage =
-        safeValue * 100;
-
-
-      /*
-        判断最高分和第二高分
-      */
-
-      const ranks =
-        getRanks(key);
-
-      let rankClass = '';
-
-      if (value === ranks.best) {
-
-        rankClass = 'best';
-
-      } else if (value === ranks.second) {
-
-        rankClass = 'second';
-
+    function createMetricCell(value,key,className){
+      const percentage=Math.max(0,Math.min(1,value))*100;
+      const ranks=overallRanks(key);
+      const rankClass=value===ranks.best?'best':(value===ranks.second?'second':'');
+      return `<div class="metric-cell ${className}"><div class="bar-track"><div class="bar-fill" style="width:${percentage}%"></div></div><div class="score ${className} ${rankClass}">${value.toFixed(2)}</div></div>`;
+    }
+    function renderOverall(){
+      let list=[...DATA.models];
+      if(overallState.sortKey){
+        list.sort((a,b)=>overallState.descending?DATA.overall[b][overallState.sortKey]-DATA.overall[a][overallState.sortKey]:DATA.overall[a][overallState.sortKey]-DATA.overall[b][overallState.sortKey]);
       }
+      document.getElementById('leaderboard-body').innerHTML=list.map(model=>{
+        const x=DATA.overall[model];
+        return `<div class="leaderboard-row"><div class="model-name">${model}</div>${createMetricCell(x.aes,'aes','teal')}${createMetricCell(x.tag,'tag','blue')}${createMetricCell(x.gen,'gen','orange')}</div>`;
+      }).join('');
+    }
+    function updateSortIndicators(){
+      document.querySelectorAll('[data-sort]').forEach(button=>{
+        const icon=button.querySelector('.sort-icon');
+        const active=overallState.sortKey===button.dataset.sort;
+        button.classList.toggle('active',active);
+        icon.textContent=active?(overallState.descending?'↓':'↑'):'↑↓';
+        button.title=active?(overallState.descending?'当前：从高到低；点击切换为从低到高':'当前：从低到高；点击切换为从高到低'):'点击排序；首次点击按从高到低排列';
+      });
+    }
+    document.querySelectorAll('[data-sort]').forEach(button=>button.addEventListener('click',()=>{
+      const key=button.dataset.sort;
+      if(overallState.sortKey===key) overallState.descending=!overallState.descending;
+      else {overallState.sortKey=key;overallState.descending=true;}
+      renderOverall();updateSortIndicators();
+    }));
 
-
-      return `
-        <div class="metric-cell ${className}">
-
-          <div class="bar-track">
-
-            <div
-              class="bar-fill"
-              style="width: ${percentage}%;"
-            ></div>
-
-          </div>
-
-          <div
-            class="score ${className} ${rankClass}"
-          >
-            ${value.toFixed(2)}
-          </div>
-
-        </div>
-      `;
-
+    function rankMap(viewKey,columns){
+      const result={};
+      columns.forEach(col=>{
+        const values=[...new Set(DATA.models.map(m=>DATA[viewKey][m][col]))].sort((a,b)=>b-a);
+        result[col]={best:values[0],second:values[1]};
+      });
+      return result;
+    }
+    function renderSubtable(viewKey){
+      const cfg=tableConfig[viewKey];
+      const ranks=rankMap(viewKey,cfg.columns);
+      const head=cfg.columns.map(c=>`<th>${c}</th>`).join('');
+      const body=DATA.models.map(model=>{
+        const cells=cfg.columns.map(c=>{
+          const v=DATA[viewKey][model][c];
+          const cls=v===ranks[c].best?'sub-best':(v===ranks[c].second?'sub-second':'');
+          return `<td class="${cls}">${v.toFixed(3)}</td>`;
+        }).join('');
+        return `<tr><td>${model}</td>${cells}</tr>`;
+      }).join('');
+      document.getElementById('subtable-view').innerHTML=`<div class="subtable-wrap"><table class="subtable theme-${cfg.theme}"><thead><tr><th>Model</th>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+      document.getElementById('view-note').textContent=cfg.title+' — values only; best values are bold and second-best values are underlined.';
     }
 
-
-    /* =========================================
-       Render Leaderboard
-       ========================================= */
-
-    function renderLeaderboard() {
-
-      const body =
-        document.getElementById(
-          'leaderboard-body'
-        );
-
-      /*
-        复制数组，避免改变原数据
-      */
-
-      let data =
-        [...rows];
-
-
-      /*
-        如果已经选择排序指标，
-        对数据进行排序。
-      */
-
-      if (state.sortKey) {
-
-        data.sort((a, b) => {
-
-          if (state.descending) {
-
-            /*
-              降序：
-              高分 -> 低分
-            */
-
-            return (
-              b[state.sortKey] -
-              a[state.sortKey]
-            );
-
-          } else {
-
-            /*
-              升序：
-              低分 -> 高分
-            */
-
-            return (
-              a[state.sortKey] -
-              b[state.sortKey]
-            );
-
-          }
-
-        });
-
+    document.querySelectorAll('.view-tab').forEach(tab=>tab.addEventListener('click',()=>{
+      document.querySelectorAll('.view-tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      const view=tab.dataset.view;
+      const overallView=document.getElementById('overall-view');
+      const subView=document.getElementById('subtable-view');
+      if(view==='overall'){
+        overallView.classList.remove('hidden');subView.classList.add('hidden');
+        document.getElementById('view-note').textContent='Overall scores. Click the colored metric headers to switch between descending and ascending order.';
+      } else {
+        overallView.classList.add('hidden');subView.classList.remove('hidden');renderSubtable(view);
       }
+    }));
 
-
-      /*
-        生成所有模型行
-      */
-
-      body.innerHTML =
-        data.map(item => `
-
-          <div class="leaderboard-row">
-
-            <div class="model-name">
-              ${item.model}
-            </div>
-
-            ${createMetricCell(
-              item.aes,
-              'aes',
-              'teal'
-            )}
-
-            ${createMetricCell(
-              item.tag,
-              'tag',
-              'blue'
-            )}
-
-            ${createMetricCell(
-              item.gen,
-              'gen',
-              'orange'
-            )}
-
-          </div>
-
-        `).join('');
-
-    }
-
-
-    /* =========================================
-       Update Sort Icons
-       ========================================= */
-
-    function updateSortIndicators() {
-
-      const buttons =
-        document.querySelectorAll(
-          '[data-sort]'
-        );
-
-      buttons.forEach(button => {
-
-        const key =
-          button.dataset.sort;
-
-        const icon =
-          button.querySelector(
-            '.sort-icon'
-          );
-
-
-        /*
-          清除当前状态
-        */
-
-        button.classList.remove(
-          'active'
-        );
-
-
-        /*
-          当前正在排序的指标
-        */
-
-        if (
-          state.sortKey === key
-        ) {
-
-          button.classList.add(
-            'active'
-          );
-
-
-          /*
-            ↓ = 从高到低
-            ↑ = 从低到高
-          */
-
-          icon.textContent =
-            state.descending
-              ? '↓'
-              : '↑';
-
-
-          /*
-            同时更新 tooltip
-          */
-
-          button.title =
-            state.descending
-              ? '当前：从高到低。点击切换为从低到高'
-              : '当前：从低到高。点击切换为从高到低';
-
-        }
-
-        /*
-          未选择的列显示 ↑↓
-        */
-
-        else {
-
-          icon.textContent =
-            '↑↓';
-
-          button.title =
-            '点击排序：首次点击按从高到低排列';
-
-        }
-
-      });
-
-    }
-
-
-    /* =========================================
-       Sort Button Events
-       ========================================= */
-
-    document
-      .querySelectorAll(
-        '[data-sort]'
-      )
-      .forEach(button => {
-
-        button.addEventListener(
-          'click',
-          () => {
-
-            const key =
-              button.dataset.sort;
-
-
-            /*
-              点击当前已经排序的指标：
-              切换升序 / 降序
-            */
-
-            if (
-              state.sortKey === key
-            ) {
-
-              state.descending =
-                !state.descending;
-
-            }
-
-            /*
-              点击新的指标：
-              默认按降序排序
-            */
-
-            else {
-
-              state.sortKey =
-                key;
-
-              state.descending =
-                true;
-
-            }
-
-
-            /*
-              重新绘制排行榜
-            */
-
-            renderLeaderboard();
-
-
-            /*
-              更新 ↑ ↓ 图标
-            */
-
-            updateSortIndicators();
-
-          }
-        );
-
-      });
-
-
-    /* =========================================
-       Initial Render
-       ========================================= */
-
-    renderLeaderboard();
-
-    updateSortIndicators();
-
+    renderOverall();updateSortIndicators();
   </script>
-
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v3d52b47920f24c319d37e2661827c42b1787588026925" integrity="sha512-d9sL6GJLXn6fInD1+TVXhTcQOsmxeHfmHAvwGDIxp5TO+uo1fiWW7mHomMj4MLRlCsJDTqXzWLHJFFlPCEIj/A==" data-cf-beacon='{"version":"2024.11.0","token":"7939e04a4baf43c8b86a560f74aac60e"}' crossorigin="anonymous"></script>
 </body>
 </html>
