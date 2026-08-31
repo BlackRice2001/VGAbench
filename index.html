@@ -1,347 +1,454 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VGA-Bench (CVPR 2026)</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fcfcfc;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        h1 {
-            color: #2c3e50;
-            font-size: 2.2em;
-            margin-bottom: 10px;
-        }
-        .conference {
-            font-size: 1.2em;
-            color: #e74c3c;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        .paper-link {
-            margin-bottom: 25px;
-        }
-        .paper-link a {
-            display: inline-block;
-            background-color: #ecf0f1;
-            color: #2980b9;
-            padding: 8px 16px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        .paper-link a:hover {
-            background-color: #dce4e6;
-        }
-        .authors-section {
-            margin-top: 20px;
-            font-size: 1.1em;
-        }
-        .authors-row {
-            margin-bottom: 10px;
-        }
-        .author-name {
-            display: inline-block;
-            margin: 0 8px;
-        }
-        .affiliations {
-            margin-top: 15px;
-            font-size: 0.95em;
-            color: #555;
-        }
-        .hero-image {
-            width: 100%;
-            max-width: 800px;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin: 0 auto 30px auto;
-            display: block;
-        }
-        section {
-            background: #ffffff;
-            padding: 30px;
-            margin-bottom: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        h2 {
-            color: #2980b9;
-            border-bottom: 2px solid #ecf0f1;
-            padding-bottom: 10px;
-            margin-top: 0;
-        }
-        p {
-            text-align: justify;
-        }
-        .resources-box {
-            background-color: #f8f9fa;
-            border-left: 5px solid #2980b9;
-            padding: 15px 20px;
-            margin-bottom: 20px;
-        }
-        .resources-box a {
-            color: #2980b9;
-            text-decoration: none;
-            font-weight: bold;
-            display: inline-block;
-            margin-right: 15px;
-        }
-        .resources-box a:hover {
-            text-decoration: underline;
-        }
-        
-        /* ---------------- 排行榜表格样式 ---------------- */
-        .table-container {
-            overflow-x: auto;
-            margin-top: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-        }
-        th, td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #ddd;
-        }
-        /* 使得模型名称左对齐更符合学术习惯 */
-        td:first-child, th:first-child {
-            text-align: left;
-        }
-        th {
-            background-color: #f4f6f7;
-            color: #333;
-            font-weight: bold;
-            cursor: pointer; /* 鼠标悬浮变小手 */
-            transition: background 0.2s;
-            user-select: none;
-        }
-        th:hover {
-            background-color: #e2e8eb;
-        }
-        /* 添加排序箭头图标占位 */
-        th::after {
-            content: ' \21C5'; /* 上下双向箭头符号 */
-            font-size: 0.8em;
-            color: #999;
-            margin-left: 5px;
-        }
-        th.asc::after {
-            content: ' \2191'; /* 上箭头 */
-            color: #2980b9;
-        }
-        th.desc::after {
-            content: ' \2193'; /* 下箭头 */
-            color: #2980b9;
-        }
-        tr:hover td {
-            background-color: #fbfbfb;
-        }
-        /* ---------------------------------------------- */
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VGA-Bench | Leaderboard</title>
+  <style>
+    :root {
+      --bg: #ececec;
+      --panel: #f5f5f5;
+      --row: #e9eaeb;
+      --row-alt: #e4e5e7;
+      --text: #243242;
+      --muted: #6b7683;
+      --teal: #2f9b97;
+      --teal-soft: #cfdee2;
+      --blue: #477ac3;
+      --blue-soft: #d2dbe8;
+      --orange: #de8541;
+      --orange-soft: #eadcd1;
+      --shadow: 0 8px 22px rgba(35, 50, 66, 0.06);
+      --radius-xl: 22px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
 
-        .upload-area {
-            text-align: center;
-            border: 2px dashed #bdc3c7;
-            padding: 40px 20px;
-            border-radius: 8px;
-            background-color: #fafbfc;
-            margin-top: 30px;
-        }
-        .upload-btn {
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-        .upload-btn:hover {
-            background-color: #219653;
-        }
-        input[type="file"] {
-            display: none;
-        }
-    </style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    .page {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 34px 34px 42px;
+    }
+
+    .header {
+      background: rgba(255,255,255,0.38);
+      border: 1px solid rgba(255,255,255,0.45);
+      border-radius: 26px;
+      padding: 26px 30px;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+      backdrop-filter: blur(4px);
+    }
+
+    .brand {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .subline {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .paper-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .paper-links a,
+    .resource-card a {
+      text-decoration: none;
+    }
+
+    .pill-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 16px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--text);
+      border: 1px solid #e1e5ea;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.03);
+    }
+
+    .pill-link:hover,
+    .resource-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(35, 50, 66, 0.08);
+    }
+
+    .section-card {
+      background: rgba(255,255,255,0.28);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-title {
+      margin: 0 0 20px;
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+
+    .leaderboard-wrap {
+      overflow-x: auto;
+    }
+
+    .leaderboard {
+      min-width: 1180px;
+    }
+
+    .leaderboard-head,
+    .leaderboard-row {
+      display: grid;
+      grid-template-columns: 260px repeat(3, minmax(260px, 1fr));
+      column-gap: 24px;
+      align-items: center;
+    }
+
+    .leaderboard-head {
+      margin-bottom: 18px;
+      padding: 0 18px;
+    }
+
+    .head-model {
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: #2b4060;
+    }
+
+    .metric-head {
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 0.96rem;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .metric-head:hover { opacity: 0.95; }
+    .metric-head:active { transform: translateY(1px); }
+
+    .metric-head.teal { background: var(--teal); }
+    .metric-head.blue { background: var(--blue); }
+    .metric-head.orange { background: var(--orange); }
+
+    .leaderboard-body {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .leaderboard-row {
+      background: rgba(255,255,255,0.17);
+      border-radius: 16px;
+      padding: 13px 18px;
+    }
+
+    .leaderboard-row:nth-child(even) {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .model-name {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #22303d;
+    }
+
+    .metric-cell {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .bar-track {
+      position: relative;
+      flex: 1 1 auto;
+      height: 18px;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      height: 100%;
+      border-radius: inherit;
+    }
+
+    .metric-cell.teal .bar-track { background: var(--teal-soft); }
+    .metric-cell.teal .bar-fill { background: var(--teal); }
+    .metric-cell.blue .bar-track { background: var(--blue-soft); }
+    .metric-cell.blue .bar-fill { background: var(--blue); }
+    .metric-cell.orange .bar-track { background: var(--orange-soft); }
+    .metric-cell.orange .bar-fill { background: var(--orange); }
+
+    .score {
+      width: 64px;
+      text-align: right;
+      font-size: 0.95rem;
+      font-variant-numeric: tabular-nums;
+      color: #233242;
+    }
+
+    .score.best {
+      font-weight: 800;
+    }
+
+    .score.second {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 2px;
+    }
+
+    .score.teal.best, .score.teal.second { color: var(--teal); }
+    .score.blue.best, .score.blue.second { color: var(--blue); }
+    .score.orange.best, .score.orange.second { color: var(--orange); }
+
+    .resources-section {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .resource-card {
+      display: block;
+      background: rgba(255,255,255,0.45);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 22px;
+      padding: 22px 24px;
+      color: inherit;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .resource-label {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .resource-card.github .resource-label {
+      background: rgba(71,122,195,0.12);
+      color: var(--blue);
+    }
+
+    .resource-card.dataset .resource-label {
+      background: rgba(47,155,151,0.12);
+      color: var(--teal);
+    }
+
+    .resource-title {
+      margin: 0 0 8px;
+      font-size: 1.14rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .resource-desc {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      word-break: break-word;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 1100px) {
+      .page { padding: 20px; }
+      .resources-section { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .header { padding: 22px 18px; }
+      .section-card { padding: 20px 16px; }
+      h1 { font-size: 1.6rem; }
+      .brand { align-items: flex-start; }
+    }
+  </style>
 </head>
 <body>
-
-    <header>
-        <h1>VGA-Bench: A Unified Benchmark and Multi-Model Framework for Video Aesthetics and Generation Quality Evaluation</h1>
-        <div class="conference">(CVPR 2026)</div>
-        
-        <div class="paper-link">
-            <a href="https://arxiv.org/abs/2604.10127" target="_blank">📄 arXiv Paper</a>
+  <div class="page">
+    <header class="header">
+      <div class="brand">
+        <div>
+          <h1>VGA-Bench</h1>
+          <div class="subline">Leaderboard · Papers · Toolkit · Dataset</div>
         </div>
-
-        <div class="authors-section">
-            <div class="authors-row">
-                <span class="author-name">Longteng Jiang<sup>1</sup></span>
-                <span class="author-name">DanDan Zheng<sup>1</sup></span>
-                <span class="author-name">Qianqian Qiao<sup>1</sup></span>
-                <span class="author-name">Heng Huang<sup>1</sup></span>
-            </div>
-            <div class="authors-row">
-                <span class="author-name">Huaye Wang<sup>1</sup></span>
-                <span class="author-name">Yihang Bo<sup>2</sup></span>
-                <span class="author-name">Bao Peng<sup>2</sup></span>
-                <span class="author-name">Jingdong Chen<sup>1, &dagger;</sup></span>
-                <span class="author-name">JUN ZHOU<sup>1</sup></span>
-                <span class="author-name">Xin Jin<sup>3, &dagger;</sup></span>
-            </div>
-            <div class="affiliations">
-                <div class="authors-row">
-                    <span class="author-name"><sup>1</sup>Ant Group</span>
-                    <span class="author-name"><sup>2</sup>Beijing Film Academy</span>
-                </div>
-                <div class="authors-row">
-                    <span class="author-name"><sup>3</sup>State Key Laboratory of General Artificial Intelligence, BIGAI</span>
-                </div>
-            </div>
+        <div class="paper-links">
+          <a class="pill-link" href="https://arxiv.org/abs/2604.10127" target="_blank" rel="noopener noreferrer">📄 arXiv 2604.10127</a>
+          <a class="pill-link" href="https://arxiv.org/abs/2608.25452" target="_blank" rel="noopener noreferrer">📄 arXiv 2608.25452</a>
         </div>
+      </div>
     </header>
 
-    <img src="head.png" alt="VGA-Bench Overview" class="hero-image">
-
-    <section id="abstract">
-        <h2>Abstract</h2>
-        <p>The rapid advancement of AIGC-based video generation has underscored the critical need for comprehensive evaluation frameworks that go beyond traditional generation quality metrics to encompass aesthetic appeal. However, existing benchmarks remain largely focused on technical fidelity, leaving a significant gap in holistic assessment—particularly with respect to perceptual and artistic qualities. To address this limitation, we introduce VGA-Bench, a unified benchmark for joint evaluation of video generation quality and aesthetic quality. VGA-Bench is built upon a principled three-tier taxonomy: Aesthetic Quality, Aesthetic Tagging, and Generation Quality, each decomposed into multiple fine-grained sub-dimensions to enable systematic assessment. Guided by this taxonomy, we design 1,016 diverse prompts and generate a large-scale dataset of over 60,000 videos using 12 video generation models, ensuring broad coverage across content, style, and artifacts. To enable scalable and automated evaluation, we annotate a subset of the dataset via human labeling and develop three dedicated multi-task neural assessors: VAQA-Net for aesthetic quality prediction, VTag-Net for automatic aesthetic tagging, and VGQA-Net for generation and basic quality attributes. Extensive experiments demonstrate that our models achieve reliable alignment with human judgments, offering both accuracy and efficiency. We release VGA-Bench as a public benchmark to foster research in AIGC evaluation, with applications in content moderation, model debugging, and generative model optimization.</p>
-    </section>
-
-    <section id="instructions">
-        <h2>Evaluation Instructions & Leaderboard</h2>
-        
-        <div class="resources-box">
-            <p><strong>Resources:</strong></p>
-            <a href="#" target="_blank">🔗 Codes and Scoring Models Download</a>
-            <a href="#" target="_blank">🔗 HuggingFace Dataset</a>
-            <a href="#" target="_blank">🔗 Prompt Suite Download</a>
+    <main class="section-card">
+      <h2 class="section-title">Leaderboard</h2>
+      <div class="leaderboard-wrap">
+        <div class="leaderboard" id="leaderboard">
+          <div class="leaderboard-head">
+            <div class="head-model">模型</div>
+            <button class="metric-head teal" data-sort="aes">Aes. Score</button>
+            <button class="metric-head blue" data-sort="tag">Tag Cla.</button>
+            <button class="metric-head orange" data-sort="gen">Gen. Level</button>
+          </div>
+          <div class="leaderboard-body" id="leaderboard-body"></div>
         </div>
+      </div>
 
-        <p>To participate in the VGA-Bench evaluation and update your model's ranking on our leaderboard, please follow these steps:</p>
-        <ol>
-            <li>Download the Prompt Suite and the official VGA-Bench scoring models from the links above.</li>
-            <li>Generate the complete video set with your own video generation model according to the provided Prompt Suite.</li>
-            <li>Deploy the official VGA-Bench scoring models locally and run them on your generated video set.</li>
-            <li>Export the original evaluation results produced by the scoring models. The submitted results must be the direct output of the scoring models.</li>
-            <li><strong>Do not modify the evaluation results in any way.</strong> Any manual editing, post-processing, filtering, or score adjustment is strictly prohibited. All submissions will be verified.</li>
-            <li>Upload only the unmodified evaluation result file(s) using the interface below. After verification, validated results will be updated on the leaderboard.</li>
-        </ol>
+      <div class="resources-section">
+        <a class="resource-card github" href="https://github.com/BestiVictory/VGA-Bench" target="_blank" rel="noopener noreferrer">
+          <div class="resource-label">Toolkit</div>
+          <h3 class="resource-title">Code &amp; Evaluation Toolkit</h3>
+          <p class="resource-desc">https://github.com/BestiVictory/VGA-Bench</p>
+        </a>
+        <a class="resource-card dataset" href="https://huggingface.co/datasets/BestiVictoryLab/VGA-Bench" target="_blank" rel="noopener noreferrer">
+          <div class="resource-label">Dataset</div>
+          <h3 class="resource-title">Hugging Face Dataset</h3>
+          <p class="resource-desc">https://huggingface.co/datasets/BestiVictoryLab/VGA-Bench</p>
+        </a>
+      </div>
+    </main>
+  </div>
 
-        <p style="color: #7f8c8d; font-size: 0.95em;"><strong>Note:</strong> Raw generated videos should not be uploaded through this page. Participants are responsible for running the released scoring models on their generated Prompt Suite videos and submitting the original scoring outputs for verification.</p>
+  <script>
+    const rows = [
+      { model: 'SVD', aes: 0.20, tag: 0.60, gen: 0.69 },
+      { model: 'AnimateDiff', aes: 0.36, tag: 0.57, gen: 0.67 },
+      { model: 'LaVie', aes: 0.34, tag: 0.58, gen: 0.68 },
+      { model: 'Show-1', aes: 0.29, tag: 0.60, gen: 0.04 },
+      { model: 'ModelScope', aes: 0.31, tag: 0.51, gen: 0.64 },
+      { model: 'CogVideoX', aes: 0.41, tag: 0.56, gen: 0.70 },
+      { model: 'Latte-1', aes: 0.35, tag: 0.60, gen: 0.68 },
+      { model: 'Mochi', aes: 0.21, tag: 0.68, gen: 0.71 },
+      { model: 'LTXVideo', aes: 0.22, tag: 0.61, gen: 0.61 },
+      { model: 'HunyuanVideo', aes: 0.45, tag: 0.66, gen: 0.73 },
+      { model: 'Wan2.2', aes: 0.46, tag: 0.63, gen: 0.71 },
+      { model: 'Sora2', aes: 0.50, tag: 0.64, gen: 0.80 }
+    ];
 
-        <div class="upload-area">
-            <h3>Submit Your Evaluation Results</h3>
-            <p style="color: #7f8c8d; font-size: 0.9em;">Supported format: original scoring result files, such as .csv, .json, or a .zip package containing unmodified results</p>
-            <label for="file-upload" class="upload-btn">
-                Click to Upload Results
-            </label>
-            <input id="file-upload" type="file" accept=".csv,.json,.zip" onchange="alert('Thank you! Your submitted evaluation results will be verified before the leaderboard is updated. Please make sure the uploaded files are original, unmodified outputs from the VGA-Bench scoring models.')">
+    const metrics = [
+      { key: 'aes', className: 'teal' },
+      { key: 'tag', className: 'blue' },
+      { key: 'gen', className: 'orange' }
+    ];
+
+    const state = {
+      sortKey: null,
+      descending: true
+    };
+
+    function getRanks(key) {
+      const values = [...new Set(rows.map(item => item[key]))].sort((a, b) => b - a);
+      return {
+        best: values[0],
+        second: values[1]
+      };
+    }
+
+    function createMetricCell(value, key, className) {
+      const max = Math.max(...rows.map(item => item[key]));
+      const min = Math.min(...rows.map(item => item[key]));
+      const normalized = max === min ? 100 : ((value - min) / (max - min)) * 100;
+      const ranks = getRanks(key);
+
+      let rankClass = '';
+      if (value === ranks.best) rankClass = 'best';
+      else if (value === ranks.second) rankClass = 'second';
+
+      return `
+        <div class="metric-cell ${className}">
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${Math.max(normalized, value > 0 ? 4 : 0)}%;"></div>
+          </div>
+          <div class="score ${className} ${rankClass}">${value.toFixed(2)}</div>
         </div>
+      `;
+    }
 
-        <h3 style="margin-top: 40px; color: #2c3e50;">Leaderboard</h3>
-        <p style="font-size: 0.9em; color: #7f8c8d;">* Click on any column header to sort the table.</p>
-        <div class="table-container">
-            <table id="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th>Model</th>
-                        <th>Aes. Score</th>
-                        <th>Tag Cla.</th>
-                        <th>Gen. Level</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>SVD</td><td>0.20</td><td>0.60</td><td>0.69</td></tr>
-                    <tr><td>AnimateDiff</td><td>0.36</td><td>0.57</td><td>0.67</td></tr>
-                    <tr><td>LaVie</td><td>0.34</td><td>0.58</td><td>0.68</td></tr>
-                    <tr><td>Show-1</td><td>0.29</td><td>0.60</td><td>0.04</td></tr>
-                    <tr><td>ModelScope</td><td>0.31</td><td>0.51</td><td>0.64</td></tr>
-                    <tr><td>CogVideoX</td><td>0.41</td><td>0.56</td><td>0.70</td></tr>
-                    <tr><td>Latte-1</td><td>0.35</td><td>0.60</td><td>0.68</td></tr>
-                    <tr><td>Mochi</td><td>0.21</td><td><b>0.68</b></td><td>0.71</td></tr>
-                    <tr><td>LTXVideo</td><td>0.22</td><td>0.61</td><td>0.61</td></tr>
-                    <tr><td>Hunyuan</td><td>0.45</td><td><u>0.66</u></td><td><u>0.73</u></td></tr>
-                    <tr><td>Wan2.2</td><td>0.46</td><td>0.63</td><td>0.71</td></tr>
-                    <tr><td>Sora2</td><td><b>0.50</b></td><td>0.64</td><td><b>0.80</b></td></tr>
-                </tbody>
-            </table>
+    function renderLeaderboard() {
+      const body = document.getElementById('leaderboard-body');
+      let data = [...rows];
+
+      if (state.sortKey) {
+        if (state.sortKey === 'model') {
+          data.sort((a, b) => state.descending
+            ? b.model.localeCompare(a.model)
+            : a.model.localeCompare(b.model));
+        } else {
+          data.sort((a, b) => state.descending
+            ? b[state.sortKey] - a[state.sortKey]
+            : a[state.sortKey] - b[state.sortKey]);
+        }
+      }
+
+      body.innerHTML = data.map(item => `
+        <div class="leaderboard-row">
+          <div class="model-name">${item.model}</div>
+          ${createMetricCell(item.aes, 'aes', 'teal')}
+          ${createMetricCell(item.tag, 'tag', 'blue')}
+          ${createMetricCell(item.gen, 'gen', 'orange')}
         </div>
+      `).join('');
+    }
 
-    </section>
+    document.querySelectorAll('[data-sort]').forEach(button => {
+      button.addEventListener('click', () => {
+        const key = button.dataset.sort;
+        if (state.sortKey === key) {
+          state.descending = !state.descending;
+        } else {
+          state.sortKey = key;
+          state.descending = true;
+        }
+        renderLeaderboard();
+      });
+    });
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const table = document.getElementById('leaderboard-table');
-            const headers = table.querySelectorAll('th');
-            const tbody = table.querySelector('tbody');
-
-            headers.forEach((header, index) => {
-                header.addEventListener('click', () => {
-                    // 确定当前的排序方向（默认初次点击为降序 desc，方便看高分）
-                    const currentIsDesc = header.classList.contains('desc');
-                    const direction = currentIsDesc ? 1 : -1; 
-                    const isAsc = currentIsDesc;
-
-                    // 移除所有表头的排序类
-                    headers.forEach(h => {
-                        h.classList.remove('asc');
-                        h.classList.remove('desc');
-                    });
-
-                    // 给当前点击的表头添加对应排序类
-                    if (isAsc) {
-                        header.classList.add('asc');
-                    } else {
-                        header.classList.add('desc');
-                    }
-
-                    // 获取所有的行并转换成数组
-                    const rowsArray = Array.from(tbody.querySelectorAll('tr'));
-
-                    // 排序核心逻辑
-                    const sortedRows = rowsArray.sort((a, b) => {
-                        // 获取对应列的纯文本内容（忽略 <b> 和 <u> 标签）
-                        const aColText = a.querySelectorAll('td')[index].textContent.trim();
-                        const bColText = b.querySelectorAll('td')[index].textContent.trim();
-
-                        // 尝试转换为数字，如果能转就按数字排，否则按字符串字母表排
-                        const aColNum = parseFloat(aColText);
-                        const bColNum = parseFloat(bColText);
-
-                        if (!isNaN(aColNum) && !isNaN(bColNum)) {
-                            return (aColNum > bColNum ? 1 : -1) * direction;
-                        } else {
-                            return aColText.localeCompare(bColText) * direction;
-                        }
-                    });
-
-                    // 将排序后的行重新插入到 tbody 中
-                    tbody.innerHTML = '';
-                    sortedRows.forEach(row => tbody.appendChild(row));
-                });
-            });
-        });
-    </script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"7939e04a4baf43c8b86a560f74aac60e","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+    renderLeaderboard();
+  </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v3d52b47920f24c319d37e2661827c42b1787588026925" integrity="sha512-d9sL6GJLXn6fInD1+TVXhTcQOsmxeHfmHAvwGDIxp5TO+uo1fiWW7mHomMj4MLRlCsJDTqXzWLHJFFlPCEIj/A==" data-cf-beacon='{"version":"2024.11.0","token":"7939e04a4baf43c8b86a560f74aac60e"}' crossorigin="anonymous"></script>
 </body>
 </html>
